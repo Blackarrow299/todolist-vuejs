@@ -2,21 +2,12 @@
 import { createBoard } from '@/api/board'
 import { ref } from 'vue'
 
-const emit = defineEmits(['closeModal'])
+const emit = defineEmits<{
+  (e: 'closeModal'): void
+  (e: 'createBoard', name: string | null): void
+}>()
 
 const boardName = ref<string | null>(null)
-
-const onCreateBoardClick = async () => {
-  if (boardName.value) {
-    const res = await createBoard(boardName.value)
-
-    if (!res.success) {
-      console.log(res.error)
-    }
-
-    emit('closeModal')
-  }
-}
 </script>
 
 <template>
@@ -32,7 +23,7 @@ const onCreateBoardClick = async () => {
       placeholder="Board name"
     />
     <button
-      @click="onCreateBoardClick"
+      @click="$emit('createBoard', boardName)"
       class="w-full bg-slate-500 text-white rounded-lg py-3 font-bold mt-2 hover:bg-slate-400"
     >
       Create
